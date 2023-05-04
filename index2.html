@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+  	<link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  	<link rel="preconnect" href="https://fonts.googleapis.com">
+  	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+  
+  	<title>Demo calculator 2</title>
+  	<style type="text/css">
+
+  	* {
+      box-sizing: border-box;
+      margin: 0;
+    }
+    body {
+      background-color: hsl(0, 0%, 94%);
+    }
+    .attribution { font-size: 12px; text-align: center; font-family: "Poppins"; margin-top: 10px; letter-spacing: 1px;}
+    .attribution a { color: hsl(228, 45%, 44%); font-family: "Poppins"; letter-spacing: 1px}
+    .container {
+      width: 550px;
+      min-height: 450px;
+      background-color: hsl(0, 0%, 100%);
+      margin: 0 auto;
+      margin-top: 100px;
+      border-radius: 20px 20px 110px 20px;
+      padding-left: 30px;
+      padding-right: 30px;
+      padding-top: 30px;
+      padding-bottom: 30px;
+      position: relative;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+    input::-webkit-outer-spin-button, 
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .container-child {
+      width: 80%;
+      min-height: 70px;
+      background-color: transparent;
+      display: flex;
+    }
+    .form-field {
+      width: 33%;
+      height: 100%;
+      background-color: transparent;
+      padding-top: 10px;
+    }
+    .form-field input:focus {
+    outline: none;
+	}
+	.form-field.error input {
+    	border-color: red;
+	}
+	.form-field.success input {
+    	border-color: green;
+	}
+	.form-field small {
+    	color: red;
+	}
+    #day, #month, #year{
+      width: 110px;
+      height: 50px;
+      transition: width 0.4s ease-in-out;
+      margin-top: -10px;
+      border: 1px hsl(0, 0%, 94%) solid;
+      border-radius: 5px;
+      font-size: 25px;
+      padding-left: 15px;
+      font-weight: bold;
+      font-family: "Poppins";
+      cursor: pointer;
+    }
+    #errorText, #errorText2, #errorText3 {
+      font-family: "Poppins";
+      margin-top: 5px;
+      font-size: 10px;
+      color: red;
+      font-style: italic;
+    }
+    #day:focus, #month:focus, #year:focus {
+      outline: 1px hsl(0, 0%, 8%) solid;
+    }
+    .form-field p {
+      font-family: "Poppins";
+      font-weight: 700;
+      letter-spacing: 3px;
+      font-size: 10px;
+      color: hsl(0, 1%, 44%);
+    }
+    .line {
+      width: 76.5%;
+      height: 1px;
+      background-color: hsl(0, 0%, 94%);
+      position: absolute;
+      top: 150px;
+    }
+    button {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background-color: hsl(259, 100%, 65%);
+      border: none;
+      cursor: pointer;
+      margin-left: 420px;
+  	}
+  	button:hover {
+  		background-color: black;
+  	}
+  	button:active {
+  		background-color: red;
+  	}
+  	h1 {
+      font-size: 65px;
+      letter-spacing: 3px;
+      font-family: "Poppins";
+      font-weight: bolder;
+      margin-top: -15px;
+    }
+    span {
+      color: hsl(259, 100%, 65%);
+      font-style: italic;
+    }
+    em {
+      color: hsl(0, 0%, 8%);
+    }
+  	</style>
+</head>
+<body>
+
+	<div class="container">
+
+	    <form id="signup" class="form" onsubmit="return false">
+
+	    	<div class="container-child">
+
+		        <div class="form-field">
+
+		          <p id="synopsis">DAY</p><br>
+		          <input type="number" id="day" name="day" placeholder="DD"><br>
+		          <small id="errorText"></small>
+		        
+		        </div>
+		        <div class="form-field">
+
+		          <p id="synopsis2">MONTH</p><br>
+		          <input type="number" id="month" name="month" placeholder="MM"><br>
+		          <small id="errorText2"></small>
+		        
+		        </div>
+		        <div class="form-field">
+
+		          <p id="synopsis3">YEAR</p><br>
+		          <input type="number" id="year" name="year" placeholder="YYYY"><br>
+		          <small id="errorText3"></small>
+		        
+		        </div>
+	      
+	    	</div>
+
+	        <div class="line"></div>
+	        <button id="calculate" onclick="getCalculation()">
+
+	        	<img src="assets/images/icon-arrow.svg" alt="arrow-icon" width="50px" height="50px" style="margin-left: 1px; margin-top: 1px;">
+	        	
+	        </button>
+	    	
+	    </form>
+
+	    <h1><span id="years"><i>--</i></span> <em>years</em></h1>
+
+      	<h1><span id="months"><i>--</i></span> <em>months</em></h1>
+
+      	<h1><span id="days"><i>--</i></span> <em>days</em></h1>
+	    
+
+	</div>
+
+
+	<script type="text/javascript">
+
+	    	function getCalculation() {
+
+	    		const dayEl = document.querySelector('#day');
+				const monthEl = document.querySelector('#month');
+				const yearEl = document.querySelector('#year');
+
+				let day = Number(dayEl.value);
+		        let month = Number(monthEl.value);
+		        let year = Number(yearEl.value);
+
+		        const today = new Date();
+		        const currYear = today.getFullYear();
+		        const currMonth = today.getMonth();
+		        const currDay = today.getDate();
+
+		        const dayError = (input) => {
+		          dayEl.style.border = '1px solid red';
+		          document.getElementById('synopsis').style.color = 'red';
+		          document.getElementById('errorText').innerHTML = 'This field is required';
+		        }
+		        const daySuccess = (input) => {
+		          dayEl.style.border = '';
+		          document.getElementById('synopsis').style.color = '';
+		          document.getElementById('errorText').innerHTML = '';
+		        }
+		        const monthError = (input) => {
+		          monthEl.style.border = '1px solid red';
+		          document.getElementById('synopsis2').style.color = 'red';
+		          document.getElementById('errorText2').innerHTML = 'This field is required';
+		        }
+		        const monthSuccess = (input) => {
+		          monthEl.style.border = '';
+		          document.getElementById('synopsis2').style.color = '';
+		          document.getElementById('errorText2').innerHTML = '';
+		        }
+		        const yearError = (input) => {
+		          yearEl.style.border = '1px solid red';
+		          document.getElementById('synopsis3').style.color = 'red';
+		          document.getElementById('errorText3').innerHTML = 'This field is required';
+		        }
+		        const yearSuccess = (input) => {
+		          yearEl.style.border = '';
+		          document.getElementById('synopsis3').style.color = '';
+		          document.getElementById('errorText3').innerHTML = '';
+		        }
+		        const dayError2 = (input) => {
+		          dayEl.style.border = '1px solid red';
+		          document.getElementById('synopsis').style.color = 'red';
+		          document.getElementById('errorText').innerHTML = 'Must be a valid date';
+		        }
+		        const monthError2 = (input) => {
+		          monthEl.style.border = '1px solid red';
+		          document.getElementById('synopsis2').style.color = 'red';
+		          document.getElementById('errorText2').innerHTML = 'Must be a valid month';
+		        }
+		        const yearError2 = (input) => {
+		          yearEl.style.border = '1px solid red';
+		          document.getElementById('synopsis3').style.color = 'red';
+		          document.getElementById('errorText3').innerHTML = 'Must be in the past';
+		        }
+
+		        //Check if any field is empty
+		        if(dayEl.value == "" && monthEl.value == "" && yearEl.value == "") {
+		            dayError(dayEl);
+		            monthError(monthEl);
+		            yearError(yearEl);
+		        } else if(dayEl.value == "" && monthEl.value == "" && yearEl.value != ""){
+		            dayError(dayEl);
+		            monthError(monthEl);
+		        } else if(dayEl.value == "" && monthEl.value != "" && yearEl.value == "") {
+		            dayError(dayEl);
+		            yearError(yearEl);
+		        } else if(dayEl.value != "" && monthEl.value == "" && yearEl.value == "") {
+		            monthError(monthEl);
+		            yearError(yearEl);
+		        } else if(dayEl.value == "" && monthEl.value != "" && yearEl.value != "") {
+		            dayError(dayEl);
+		        } else if(dayEl.value != "" && monthEl.value == "" && yearEl.value != "") {
+		            monthError(monthEl);
+		        } else if(dayEl.value != "" && monthEl.value != "" && yearEl.value == "") {
+		            yearError(yearEl);
+		        } else {
+		        	daySuccess(dayEl);
+		        	monthSuccess(monthEl);
+		        	yearSuccess(yearEl);
+		        };
+
+		        //Check if day is between 1 and 31
+		        if (dayEl.value == "") {
+		        	dayError(dayEl);
+		        } else if (dayEl.value < 1 || dayEl.value > 31) {
+		        	dayError2(dayEl);
+		        } else {
+		        	daySuccess(dayEl);
+		        }
+
+		        //Check if month is between 1 and 12
+		        if (monthEl.value == "") {
+		        	monthError(monthEl);
+		        } else if (monthEl.value < 1 || monthEl.value > 12) {
+		        	monthError2(monthEl);
+		        } else {
+		        	monthSuccess(monthEl);
+		        }
+
+		        //Check if year is in the future
+		        if (yearEl.value == "") {
+		        	yearError(yearEl);
+		        } else if (yearEl.value > currYear) {
+		        	yearError2(yearEl);
+		        } else {
+		        	yearSuccess(yearEl);
+		        }
+		        //check if date is in the future
+		        if (dayEl.value == "" && monthEl.value == "" && yearEl.value == "") {
+		        	dayError(dayEl);
+		        	monthError(monthEl);
+		        	yearError(yearEl);
+		        } else if (dayEl.value > 28 && month == 2 && !isLeapYear(year)) {
+		        	dayEl.style.border = '1px solid red';
+		        	monthEl.style.border = '1px solid red';
+		        	yearEl.style.border = '1px solid red';
+		        	document.getElementById('synopsis').style.color = 'red';
+		        	document.getElementById('synopsis2').style.color = 'red';
+		        	document.getElementById('synopsis3').style.color = 'red';
+		        	document.getElementById('errorText').innerHTML = 'Must be a valid date';
+		        } else if (dayEl.value > 30 && (month == 4 || month == 6 || month == 9 || month == 11)) {
+		        	dayEl.style.border = '1px solid red';
+		        	monthEl.style.border = '1px solid red';
+		        	yearEl.style.border = '1px solid red';
+		        	document.getElementById('synopsis').style.color = 'red';
+		        	document.getElementById('synopsis2').style.color = 'red';
+		        	document.getElementById('synopsis3').style.color = 'red';
+		        	document.getElementById('errorText').innerHTML = 'Must be a valid date';
+		        } else if (day > 31) {
+		        	dayEl.style.border = '1px solid red';
+		        	monthEl.style.border = '1px solid red';
+		        	yearEl.style.border = '1px solid red';
+		        	document.getElementById('synopsis').style.color = 'red';
+		        	document.getElementById('synopsis2').style.color = 'red';
+		        	document.getElementById('synopsis3').style.color = 'red';
+		        	document.getElementById('errorText').innerHTML = 'Must be a valid date';
+		        } else {
+		        	dayEl.style.border = '';
+		        	monthEl.style.border = '';
+		        	yearEl.style.border = '';
+		        	document.getElementById('synopsis').style.color = '';
+		        	document.getElementById('synopsis2').style.color = '';
+		        	document.getElementById('synopsis3').style.color = '';
+		        	document.getElementById('errorText').innerHTML = '';
+		        }
+
+		        function getLastDayOfMonth(month, year) {
+		          const lastDayOfMonth = new Date(year, month, 0);
+		          return lastDayOfMonth.getDate();
+		        }		        
+
+
+		        return true;
+
+		        let ageInYear = currYear - year;
+		        let ageInMonth = currMonth - month;
+		        let ageInDay = currDay - day;
+
+		        if (ageInMonth < 0 || (ageInMonth === 0 && ageInDay < 0)) {
+		          ageInYear--;
+		          ageInMonth = ageInMonth + 12;
+		          if (ageInDay < 0) {
+		            ageInDay = ageInDay + getLastDayOfMonth(currMonth - 1, currYear);
+		          }
+		        }
+
+		        document.getElementById('years').innerHTML = ageInYear;
+		        document.getElementById('months').innerHTML = ageInMonth;
+		        document.getElementById('days').innerHTML = ageInDay;
+
+	    	}
+
+	    	function isLeapYear(year) {
+		        	return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
+		    }
+
+		    function getMonthName(month) {
+		        let monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+		        return monthNames[month];
+		    }
+		
+	</script>
+
+</body>
+</html>
+
